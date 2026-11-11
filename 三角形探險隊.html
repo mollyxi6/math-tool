@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三角形探險隊｜幾何王國大冒險</title>
+<style>
+:root{--blue:#4389db;--green:#54bd91;--ink:#34445c;--bg:#f2f8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif}
+header{background:linear-gradient(120deg,#4389db,#8d83df);color:white;text-align:center;padding:23px 12px}
+header h1{margin:0;font-size:clamp(24px,5vw,36px)}
+header p{margin:8px 0 0;font-size:15px}
+main{max-width:900px;margin:22px auto;padding:0 15px}
+.panel{background:white;border-radius:22px;padding:25px;box-shadow:0 5px 20px #7894b51b;margin-bottom:18px}
+h2{color:#397ac4;margin-top:0}
+button{border:0;border-radius:14px;padding:12px 22px;font-size:16px;font-weight:bold;cursor:pointer;transition:.2s;font-family:inherit}
+button:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.primary{background:var(--blue);color:white}.secondary{background:#e9f2ff;color:#397ac4}.success{background:var(--green);color:white}
+.hidden{display:none!important}.center{text-align:center}.hero{font-size:65px;margin:10px}
+.subtitle{color:#71839b;line-height:1.8}
+.badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.badge{background:#edf4ff;border-radius:30px;padding:8px 15px;font-size:14px;font-weight:bold}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.lesson-card{background:#f3f8ff;border-radius:16px;padding:14px;text-align:center;border:2px solid #e3edfa}
+.lesson-card svg{width:100%;height:115px}.lesson-card h3{margin:5px 0;color:#397ac4}.lesson-card p{font-size:14px;line-height:1.6;margin:5px}
+.progress-area{margin:12px 0}.progress-info{display:flex;justify-content:space-between;font-size:14px}
+.progress{height:12px;background:#e9eef6;border-radius:20px;overflow:hidden;margin-top:8px}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#54bd91,#8ad9aa);transition:width .3s}
+.question{text-align:center;font-size:21px;font-weight:bold;line-height:1.5;margin:12px 0}
+.figure{background:#f7faff;border:2px dashed #c9ddf5;border-radius:18px;padding:10px;margin:15px auto;max-width:400px}
+.figure svg{width:100%;height:230px;display:block}
+.options{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px;margin-top:18px}
+.option{background:#f0f5ff;color:#3d6592;border:2px solid #dbe8f8;min-height:60px}
+.option:disabled{opacity:.75;cursor:default}.option.correct{background:#e0f7eb;border-color:#54bd91;color:#27865d}
+.option.wrong{background:#fff0f1;border-color:#ff9aaa;color:#bf5268}
+.feedback{border-radius:15px;padding:14px;margin-top:15px;line-height:1.7;display:none;text-align:center}
+.feedback.good{display:block;background:#e7f9ef;color:#24794e}.feedback.bad{display:block;background:#fff4e5;color:#94601e}
+.status{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:10px 0;font-weight:bold;color:#607c9d}
+.star{position:fixed;pointer-events:none;font-size:27px;animation:fly 1s forwards;z-index:10}
+@keyframes fly{0%{opacity:1;transform:translateY(0) scale(.5)}100%{opacity:0;transform:translateY(-120px) scale(1.6)}}
+.shake{animation:shake .3s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.score-card{background:#f1f7ff;padding:17px;border-radius:15px;text-align:center}
+.score-card strong{display:block;font-size:27px;color:#4389db}
+.review{overflow-x:auto}table{width:100%;border-collapse:collapse;margin-top:15px;font-size:14px}
+th,td{border:1px solid #dce7f3;padding:10px;text-align:center}th{background:#eaf3ff;color:#397ac4}
+td svg{width:90px;height:75px}footer{text-align:center;color:#8b9db2;font-size:12px;padding:15px}
+@media(max-width:550px){.panel{padding:17px}.question{font-size:18px}.figure svg{height:190px}table{min-width:650px}}
+</style>
+</head>
+<body>
+<header><h1>🔺 三角形探險隊</h1><p>幾何王國大冒險｜四年級數學 S-4-06</p></header>
+<main>
+<section id="home" class="panel center">
+  <div class="hero">🧭🔺🏰</div><h2>歡迎來到幾何王國！</h2>
+  <p class="subtitle">三角形王國裡有好多不同形狀的三角形！<br>你能運用觀察力，幫忙找出它們的特徵嗎？<br>完成兩大關卡，成為最厲害的三角形小博士！</p>
+  <div class="badges"><span class="badge">⭐ 兩大關卡</span><span class="badge">⏱ 挑戰計時</span><span class="badge">🏆 星星獎勵</span></div><br>
+  <button class="primary" onclick="showLesson(1)">開始探險！ 🚀</button>
+</section>
+<section id="lesson" class="panel hidden"><div id="lesson-content"></div><div class="center"><button class="primary" onclick="startGame()">我學會了！開始挑戰 ➜</button></div></section>
+<section id="game" class="panel hidden">
+  <div class="status"><span id="level-name">第一關</span><span id="timer">⏱ 00:00</span><span id="score">⭐ 0 顆</span></div>
+  <div class="progress-area"><div class="progress-info"><span>探險進度</span><span id="progress-text">0 / 6</span></div><div class="progress"><div class="progress-bar" id="progress-bar"></div></div></div>
+  <div class="question" id="question"></div><div class="figure" id="figure"></div>
+  <div class="center subtitle" id="figure-hint">仔細觀察三角形的邊和角喔！</div>
+  <div class="options" id="options"></div><div id="feedback" class="feedback"></div>
+  <div class="center" style="margin-top:15px"><button id="next-btn" class="success hidden" onclick="nextQuestion()">下一題 ➜</button></div>
+</section>
+<section id="result" class="panel hidden">
+  <div class="center"><div class="hero" id="result-emoji">🏆</div><h2>恭喜完成三角形探險！</h2><p id="result-message">你真是幾何小高手！</p></div>
+  <div class="summary-grid">
+    <div class="score-card">答對題數<strong id="final-correct">0 / 12</strong></div>
+    <div class="score-card">答對率<strong id="final-rate">0%</strong></div>
+    <div class="score-card">獲得星星<strong id="final-stars">0 ⭐</strong></div>
+    <div class="score-card">花費時間<strong id="final-time">00:00</strong></div>
+  </div>
+  <h2>📚 三角形分類總表</h2><p class="subtitle">再看一次各種三角形的特徵，讓知識記得更牢固！</p>
+  <div class="review"><table><thead><tr><th>分類</th><th>範例圖</th><th>判斷特徵</th></tr></thead><tbody id="review-table"></tbody></table></div>
+  <div class="center" style="margin-top:22px"><button class="primary" onclick="restart()">🔄 再玩一次</button> <button class="secondary" onclick="showHome()">回首頁</button></div>
+</section>
+</main>
+<footer>三角形探險隊｜數學學習遊戲｜S-4-06</footer>
+
+<script>
+// 頂點座標依序為 A、B、C；圖形以真實座標比例繪製。
+const shapes={
+  equilateral:{name:"正三角形",points:[[110,20],[30,158],[190,158]],equalSides:[0,1,2]},
+  isosceles:{name:"等腰三角形",points:[[110,20],[35,145],[185,145]],equalSides:[0,2]},
+  scalene:{name:"一般三角形",points:[[35,35],[190,65],[65,160]],equalSides:[]},
+  acute:{name:"銳角三角形",points:[[110,20],[25,150],[195,150]],equalSides:[]},
+  right:{name:"直角三角形",points:[[35,30],[35,155],[185,155]],equalSides:[]},
+  obtuse:{name:"鈍角三角形",points:[[25,55],[195,55],[55,105]],equalSides:[]},
+  isoright:{name:"等腰直角三角形",points:[[35,35],[35,155],[155,155]],equalSides:[0,1]}
+};
+
+function distance(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1])}
+function angleAt(a,b,c){
+  const v1=[a[0]-b[0],a[1]-b[1]],v2=[c[0]-b[0],c[1]-b[1]];
+  const dot=v1[0]*v2[0]+v1[1]*v2[1];
+  const l1=Math.hypot(...v1),l2=Math.hypot(...v2);
+  return Math.acos(Math.max(-1,Math.min(1,dot/(l1*l2))))*180/Math.PI;
+}
+function getAngles(points){
+  return [
+    angleAt(points[1],points[0],points[2]),
+    angleAt(points[0],points[1],points[2]),
+    angleAt(points[0],points[2],points[1])
+  ];
+}
+function svgTriangle(key,small=false){
+  const s=shapes[key],p=s.points,angles=getAngles(p);
+  let marks="";
+  // 邊編號：0 = AB、1 = BC、2 = CA
+  s.equalSides.forEach(i=>{
+    const a=p[i],b=p[(i+1)%3],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
+    const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);
+    const nx=-dy/len*7,ny=dx/len*7;
+    marks+=`<line x1="${mx-nx}" y1="${my-ny}" x2="${mx+nx}" y2="${my+ny}" stroke="#e58b36" stroke-width="3" stroke-linecap="round"/>`;
+  });
+
+  // 依頂點座標自動找出直角，不使用手動輸入的角度索引。
+  let rightMark="";
+  const rightIndex=angles.findIndex(a=>Math.abs(a-90)<0.01);
+  if(rightIndex>=0){
+    const v=p[rightIndex],a=p[(rightIndex+1)%3],b=p[(rightIndex+2)%3];
+    const unit=q=>{
+      const dx=q[0]-v[0],dy=q[1]-v[1],len=Math.hypot(dx,dy);
+      return [dx/len*18,dy/len*18];
+    };
+    const u=unit(a),w=unit(b);
+    const q1=[v[0]+u[0],v[1]+u[1]];
+    const q2=[q1[0]+w[0],q1[1]+w[1]];
+    const q3=[v[0]+w[0],v[1]+w[1]];
+    rightMark=`<path d="M ${q1[0]} ${q1[1]} L ${q2[0]} ${q2[1]} L ${q3[0]} ${q3[1]}" fill="none" stroke="#e58b36" stroke-width="3.5" stroke-linejoin="round"/>`;
+  }
+  return `<svg viewBox="0 0 220 180" role="img" aria-label="${s.name}">
+    <polygon points="${p.map(v=>v.join(",")).join(" ")}" fill="#dceeff" stroke="#4389db" stroke-width="3" stroke-linejoin="round"/>
+    ${marks}${rightMark}
+    ${p.map(v=>`<circle cx="${v[0]}" cy="${v[1]}" r="3.5" fill="#e58b36"/>`).join("")}
+  </svg>`;
+}
+
+const lessons={
+  1:{title:"第一關：邊長偵探 🔍",intro:"三角形有三個頂點、三條邊和三個角。這一關要用眼睛比較三條邊的長度！",
+    cards:[["equilateral","🔺 正三角形","三條邊一樣長，三個角都是60度。"],["isosceles","📐 等腰三角形","有兩條邊一樣長，這兩條邊叫作「腰」，另一條叫作「底邊」。"],["scalene","📏 一般三角形","三條邊長度都不一樣。"]],
+    note:"小提醒：正三角形也符合兩邊相等的條件；本關為了練習互斥分類，將等腰三角形當作「兩邊相等但不是正三角形」的類別。"},
+  2:{title:"第二關：角度偵探 📐",intro:"這一關要觀察三角形裡面的三個角，看看有沒有直角，或是不是全部都是銳角！",
+    cards:[["acute","🟢 銳角三角形","三個角全部都是銳角。"],["right","🔵 直角三角形","有一個角是直角，也就是90度。"],["obtuse","🟠 鈍角三角形","有一個角是鈍角，大於90度。"],["isoright","🟣 等腰直角三角形","兩條邊一樣長，而且有一個直角。"]],
+    note:"小提醒：等腰直角三角形同時具有「等腰」和「直角」兩種特徵。"}
+};
+
+let level=1,index=0,correct=0,attempts=0,stars=0,questions=[],answered=false,startTime=0,timerInterval=null,wrongCount=0;
+function hideAll(){["home","lesson","game","result"].forEach(id=>document.getElementById(id).classList.add("hidden"))}
+function showHome(){clearInterval(timerInterval);timerInterval=null;hideAll();document.getElementById("home").classList.remove("hidden")}
+function showLesson(n){
+  level=n;hideAll();document.getElementById("lesson").classList.remove("hidden");
+  const l=lessons[n];
+  document.getElementById("lesson-content").innerHTML=`<h2>${l.title}</h2><p class="subtitle">${l.intro}</p>
+  <div class="lesson-grid">${l.cards.map(c=>`<div class="lesson-card">${svgTriangle(c[0],true)}<h3>${c[1]}</h3><p>${c[2]}</p></div>`).join("")}</div>
+  <div class="feedback good" style="display:block">${l.note}</div>`;
+}
+function startGame(){
+  hideAll();document.getElementById("game").classList.remove("hidden");index=0;wrongCount=0;
+  questions=level===1?["equilateral","isosceles","scalene","equilateral","isosceles","scalene"]:["acute","right","obtuse","isoright","acute","right"];
+  questions.sort(()=>Math.random()-.5);renderQuestion();
+  if(!startTime){startTime=Date.now();timerInterval=setInterval(updateTimer,1000)}
+}
+function updateTimer(){document.getElementById("timer").textContent="⏱ "+formatTime(Math.floor((Date.now()-startTime)/1000))}
+function formatTime(sec){return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function renderQuestion(){
+  answered=false;wrongCount=0;const key=questions[index];
+  document.getElementById("level-name").textContent=level===1?"第一關｜邊長偵探":"第二關｜角度偵探";
+  document.getElementById("question").textContent=level===1?"請觀察這個三角形，判斷它是什麼三角形？":"請觀察這個三角形的角，判斷它屬於哪一類？";
+  document.getElementById("figure").innerHTML=svgTriangle(key);
+  document.getElementById("figure-hint").textContent=level===1?"🔍 看看三條邊有沒有一樣長！":"📐 找找看有沒有直角或鈍角！";
+  const opts=level===1?["equilateral","isosceles","scalene"]:["acute","right","obtuse","isoright"];
+  document.getElementById("options").innerHTML=opts.map(k=>`<button class="option" data-key="${k}" onclick="checkAnswer('${k}')">${shapes[k].name}</button>`).join("");
+  const fb=document.getElementById("feedback");fb.className="feedback";fb.textContent="";
+  document.getElementById("next-btn").classList.add("hidden");
+  document.getElementById("progress-text").textContent=`${index+1} / 6`;
+  document.getElementById("progress-bar").style.width=(index/6*100)+"%";
+  document.getElementById("score").textContent="⭐ "+stars+" 顆";
+}
+function hintFor(key){
+  const hints={
+    equilateral:"提示：三條邊是不是都一樣長？正三角形的三條邊都一樣長喔！",
+    isosceles:"提示：找找看，有沒有兩條邊長度一樣？",
+    scalene:"提示：請比較三條邊，看看是不是每一條都不一樣長？",
+    acute:"提示：仔細看三個角，是否全部都比直角小？",
+    right:"提示：找找看，有沒有一個角剛好是90度？",
+    obtuse:"提示：有沒有一個角比直角還大？",
+    isoright:"提示：這個三角形有直角，另外再看看是否有兩條邊一樣長？"
+  };return hints[key];
+}
+function explanation(key){
+  const explanations={
+    equilateral:"答對了！三條邊一樣長，而且三個角都是60度，這就是正三角形！",
+    isosceles:"答對了！有兩條邊一樣長，這兩條邊叫作腰，另一條叫作底邊。",
+    scalene:"答對了！三條邊的長度都不一樣，這是一般三角形。",
+    acute:"答對了！三個角全部都是銳角，所以是銳角三角形。",
+    right:"答對了！它有一個90度的直角，所以是直角三角形。",
+    obtuse:"答對了！它有一個大於90度的鈍角，所以是鈍角三角形。",
+    isoright:"答對了！它有兩條等長的邊，也有一個90度的直角，是等腰直角三角形！"
+  };return explanations[key];
+}
+function checkAnswer(choice){
+  if(answered)return;const key=questions[index],fb=document.getElementById("feedback"),buttons=document.querySelectorAll(".option");attempts++;
+  if(choice===key){
+    answered=true;correct++;stars+=wrongCount===0?2:1;fb.className="feedback good";fb.textContent="🌟 "+explanation(key);
+    buttons.forEach(b=>{b.disabled=true;if(b.dataset.key===key)b.classList.add("correct")});
+    document.getElementById("next-btn").classList.remove("hidden");
+    document.getElementById("progress-bar").style.width=((index+1)/6*100)+"%";
+    document.getElementById("score").textContent="⭐ "+stars+" 顆";starEffect();
+  }else{
+    wrongCount++;fb.className="feedback bad";fb.textContent="💡 再想一想！"+hintFor(key);
+    buttons.forEach(b=>{if(b.dataset.key===choice){b.classList.add("wrong");b.disabled=true}});
+    const fig=document.getElementById("figure");fig.classList.add("shake");setTimeout(()=>fig.classList.remove("shake"),350);
+  }
+}
+function nextQuestion(){index++;if(index<6)renderQuestion();else if(level===1)showLesson(2);else finishGame()}
+function starEffect(){
+  for(let i=0;i<8;i++){const el=document.createElement("div");el.className="star";el.textContent=["⭐","✨","🌟"][i%3];el.style.left=(35+Math.random()*30)+"vw";el.style.top=(35+Math.random()*25)+"vh";document.body.appendChild(el);setTimeout(()=>el.remove(),1100)}
+}
+function finishGame(){
+  clearInterval(timerInterval);timerInterval=null;hideAll();document.getElementById("result").classList.remove("hidden");
+  const elapsed=Math.floor((Date.now()-startTime)/1000),rate=Math.round(correct/12*100);
+  document.getElementById("final-correct").textContent=correct+" / 12";
+  document.getElementById("final-rate").textContent=rate+"%";
+  document.getElementById("final-stars").textContent=stars+" ⭐";
+  document.getElementById("final-time").textContent=formatTime(elapsed);
+  document.getElementById("result-emoji").textContent=rate===100?"👑":rate>=80?"🏆":rate>=60?"🌟":"💪";
+  document.getElementById("result-message").textContent=rate===100?"太厲害了！你已經是三角形大師！":rate>=80?"表現非常棒！你已經掌握大部分的三角形知識！":rate>=60?"很棒喔！再複習一下，就會更厲害！":"探險完成！多練習幾次，你一定會進步！";
+  const review=[
+    ["equilateral","正三角形","三條邊一樣長，三個角都是60度。"],
+    ["isosceles","等腰三角形","有兩條邊一樣長，稱為腰；另外一邊是底邊。"],
+    ["scalene","一般三角形","三條邊長度都不一樣。"],
+    ["acute","銳角三角形","三個角全部都是銳角。"],
+    ["right","直角三角形","有一個角是90度。"],
+    ["obtuse","鈍角三角形","有一個角大於90度。"],
+    ["isoright","等腰直角三角形","有兩條等長的邊，且有一個直角。"]
+  ];
+  document.getElementById("review-table").innerHTML=review.map(r=>`<tr><td><strong>${r[1]}</strong></td><td>${svgTriangle(r[0],true)}</td><td>${r[2]}</td></tr>`).join("");
+}
+function restart(){correct=0;attempts=0;stars=0;startTime=0;clearInterval(timerInterval);timerInterval=null;level=1;showLesson(1)}
+</script>
+</body>
+</html>
